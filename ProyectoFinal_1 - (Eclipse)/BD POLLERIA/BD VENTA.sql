@@ -1,0 +1,250 @@
+USE MASTER
+CREATE DATABASE VENTA
+GO
+USE VENTA
+
+--DISEÑANDO LA TABLA USUARIO
+CREATE TABLE USUARIO(
+             CodUsu         char (5) NOT NULL PRIMARY KEY,
+             NomUsu         varchar(50) NOT NULL,
+             ClaUsu         char (7) NOT NULL
+)
+
+--DISEÑANDO LA TABLA CLIENTE
+CREATE TABLE CLIENTE(
+             ID_CLIENTE            char (5) NOT NULL PRIMARY KEY,
+             NOMBRE_CLIENTE        varchar (25) NULL,
+             APELLIDO_CLIENTE      varchar (25) NULL,
+             SEXO_CLIENTe          char(1) NULL,
+             DIRECCION_CLIENTE     varchar(30) NULL,
+             TELEFONO_CLIENTE      int   NULL,
+             
+)
+go
+
+--DISEÑANDO LA TABLA VENTA
+CREATE TABLE VENTA(
+             ID_VENTA        char (5) NOT NULL PRIMARY KEY,
+             FECHA_VENTA     datetime NOT NULL,
+             IMPORTE_VENTA   int NULL,
+             ID_EMPLEADO     char(5) null,
+             ID_CLIENTE      char(5) null
+)
+go             
+           
+--DISEÑANDO LA TABLA EMPLEADO
+CREATE TABLE EMPLEADO(
+             ID_EMPLEADO           char (5) NOT NULL PRIMARY KEY,
+             NOMBRE_EMPLEADO       varchar (25) NULL,
+             SEXO_EMPLEADO         char(1) NULL,
+             DIRECCION_EMPLEADO    varchar (30) NULL,
+             TELEFONO_EMPLEADO     int   NULL,
+             CARGO_EMPLEADO        varchar (20)
+)
+go 
+
+--DISEÑANDO LA TABLA DETALLE VENTA
+CREATE TABLE DETALLE_VENTA(
+             ID_VENTA        char(5) NOT NULL PRIMARY KEY,
+             CANTIDAD_VENTA  int NOT NULL,
+             IMPORTE_VENTA   int NULL,
+             ID_PLATO        char(5) null
+             
+)
+go 
+
+--DISEÑANDO LA TABLA PLATO
+CREATE TABLE PLATO(
+             ID_PLATO            char(5) NOT NULL PRIMARY KEY,
+             NOMBRE_PLATO        varchar(25) NOT NULL,
+             DESCRIPCION_PLATO   varchar(25) NULL,
+             ID_TIPOPLATO         char(5) null
+             
+)
+go            
+  
+--DISEÑANDO LA TABLA TIPO DE PLATO
+CREATE TABLE TIPO_PLATO(
+             ID_TIPOPLATO        char(5) NOT NULL PRIMARY KEY,
+             NOMBRE_TIPOPLATO    varchar(25) NOT NULL,
+              
+)
+go 
+
+--DISEÑANDO LA TABLA BEBIDA
+CREATE TABLE BEBIDA(
+             ID_BEBIDA          char(5) NOT NULL PRIMARY KEY,
+             NOMBRE_BEBIDA      varchar(25) NULL,
+             CANTIDAD_BEBIDA    int,
+             LITRO_BEBIDA       varchar(25) NULL,
+             PRECIO_BEBIDA      int
+             
+)
+go
+
+--DISEÑANDO LA TABLA BOLETA
+CREATE TABLE BOLETA (
+       ID_BOLETA       char(10) NOT NULL PRIMARY KEY,
+       FECHA_BOLETA    datetime NOT NULL,
+       ID_EMPLEADO     char(5)  NULL,          
+       ID_CLIENTE      char(5) NULL
+)
+go
+  
+--DISEÑANDO LA TABLA DETALLE BOLETA
+CREATE TABLE DETALLE_BOLETA (
+        ID_BOLETA        char(10) NOT NULL, --fk
+        DESCRIP_DETALLE  varchar(25) NOT NULL,
+        CANTIDAD_DETALLE int NULL,
+        IMPORTE_DETALLE  int NOT NULL,
+        DESC_DETALLE     int,
+        ID_PLATO         char(5) NULL,
+        ID_BEBIDA        char(5) NULL
+)
+go 
+
+--DISEÑANDO LA TABLA FACTURA
+CREATE TABLE FACTURA (
+       ID_FACTURA      char(10) NOT NULL PRIMARY KEY,
+       RUC_FACTURA     varchar(11) NOT NULL,
+       FECHA_BOLETA    datetime NOT NULL,
+       ID_EMPLEADO     char (5)  NULL,          
+       ID_CLIENTE      char(5) NULL
+)
+go
+
+CREATE TABLE DETALLE_FACTURA (
+        ID_FACTURA        char(10) NOT NULL, --fk
+        RAZON_SOCIALF     varchar(50) NULL,
+        DESCRIP_DETALLEF  varchar(25) NULL,
+        IMPORTE_DETALLEF  int NOT NULL,
+        DESC_DETALLEF     int,
+        ID_PLATO          char(5) NULL,
+        ID_BEBIDA         char(5) NULL
+)
+go 
+
+
+---------------------------------------------------------------------------
+
+--CREANDO LAS LLAVES FORÁNEAS
+ALTER TABLE VENTA
+       ADD FOREIGN KEY (ID_EMPLEADO)
+                             REFERENCES EMPLEADO
+go  
+
+ALTER TABLE VENTA
+       ADD FOREIGN KEY (ID_CLIENTE)
+                             REFERENCES CLIENTE
+go
+
+ALTER TABLE DETALLE_VENTA
+       ADD FOREIGN KEY (ID_PLATO)
+                             REFERENCES PLATO
+go
+
+ALTER TABLE PLATO
+       ADD FOREIGN KEY (ID_TIPOPLATO)
+                             REFERENCES TIPO_PLATO
+go
+
+ALTER TABLE BOLETA
+       ADD FOREIGN KEY ( ID_EMPLEADO )
+                             REFERENCES EMPLEADO
+go
+
+ALTER TABLE BOLETA
+       ADD FOREIGN KEY ( ID_CLIENTE )
+                             REFERENCES CLIENTE
+go
+ 
+ALTER TABLE DETALLE_BOLETA
+       ADD FOREIGN KEY ( ID_BOLETA   )
+                             REFERENCES BOLETA
+go 
+  
+ALTER TABLE DETALLE_BOLETA
+      ADD FOREIGN KEY (  ID_PLATO )
+                             REFERENCES PLATO
+                             go   
+
+ALTER TABLE DETALLE_BOLETA
+      ADD FOREIGN KEY (ID_BEBIDA )
+                           REFERENCES BEBIDA                       
+go
+ 
+ALTER TABLE FACTURA 
+      ADD FOREIGN KEY (ID_EMPLEADO)
+                          REFERENCES EMPLEADO
+go
+
+ALTER TABLE FACTURA
+      ADD FOREIGN KEY (ID_CLIENTE)
+                          REFERENCES CLIENTE
+go
+
+ALTER TABLE DETALLE_FACTURA
+      ADD FOREIGN KEY(ID_FACTURA)
+                       REFERENCES FACTURA
+go
+
+ALTER TABLE DETALLE_FACTURA
+      ADD FOREIGN KEY (ID_PLATO)
+                        REFERENCES PLATO
+go
+
+ALTER TABLE DETALLE_FACTURA
+      ADD FOREIGN KEY (ID_BEBIDA)
+                        REFERENCES BEBIDA
+go
+
+
+/*INSERTANDO REGISTROS A LA TABLA USUARIO */
+
+INSERT INTO USUARIO VALUES ('USU01','JHON ZURITA',1234567)
+INSERT INTO USUARIO VALUES ('USU02','JUAN DIAZ',1485623)
+INSERT INTO USUARIO VALUES ('USU03','ALEX',1485623)
+
+--EXAMINANDO LA TABLA USUARIO
+SELECT * FROM USUARIO
+--SELECT * FROM USUARIO WHERE NomUsu= 'JHON ZURITA'
+
+ -- ELIMINAR  UN REGISTRO 
+DELETE from USUARIO where CodUsu='usu04';
+
+/*  REGISTROS A LA TABLA CLIENTE */
+INSERT INTO CLIENTE VALUES('CLI01', 'ROXANA','RUIS LOPEZ','F','LAS FLORES DE VILLA',12345678)
+INSERT INTO CLIENTE VALUES('CLI02', 'DIANA','NOSE LOPEZ','F','VILLA DEL SALVADOR',12345678)
+INSERT INTO CLIENTE VALUES('CLI03', 'JOEL','DIAZ LOPEZ','M','SAN JUAN',12345678)
+
+--EXAMINANDO LA TABLA CLIENTE
+SELECT * FROM CLIENTE
+
+/* INSERTANDO  REGISTRO A LA TABLA EMPLEADO */
+INSERT INTO EMPLEADO VALUES('EMP01','JUAN ZURITA','M','LAS FLORES DE VILLA',943890789,'MESERO')
+INSERT INTO EMPLEADO VALUES('EMP02','JHON DIAZ','M','LAS FLORES DE VILLA',948690789,'CAJERO')
+
+
+--EXAMINANDO LA TABLA EMPLEADO
+SELECT * FROM EMPLEADO
+
+/* INSERTANDO REGISTROS A LA TABLA VENTA */
+INSERT INTO VENTA VALUES('VEN01','15/10/2019',20,'EMP01','CLI01')
+INSERT INTO VENTA VALUES('VEN02','12/11/2019',10,'EMP01','CLI02')
+
+/* INSERTANDO REGISTROS A LA TABLA BOLETA */
+
+
+--EXAMINANDO LA TABLA VENTA
+SELECT * FROM VENTA
+
+--CREANDO VISTA USUARIO
+CREATE VIEW V_USUARIO
+      AS
+       SELECT CODIGO=CodUsu,NOMBRE=NomUsu, CLAVE=ClaUsu
+         FROM USUARIO
+go
+
+SELECT * FROM V_USUARIO
+
+SELECT * FROM EMPLEADO
